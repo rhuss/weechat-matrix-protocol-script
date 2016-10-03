@@ -1913,6 +1913,11 @@ function Room:addNick(user_id, displayname)
         or displayname:match'^%s+$' then
         displayname = user_id:match('@(.*):.+')
     end
+    -- Remove any suffix added by Matrix for nice auto completion e.g.
+    -- in IRC channels. Should probably guarded with an config option
+    -- like 'plugins.var.lua.matrix.strip_nicks'
+    displayname = displayname:match('([^%s]+)')
+
     if not self.users[user_id] then
         self.member_count = self.member_count + 1
         newnick = true
